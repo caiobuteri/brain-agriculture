@@ -1,7 +1,7 @@
 // src/producers/producers.repository.ts
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository, FindManyOptions } from 'typeorm';
 import { Producer } from './entities/producer.entity';
 
 @Injectable()
@@ -16,8 +16,12 @@ export class ProducersRepository {
     return this.repository.save(entity);
   }
 
-  async findAll(): Promise<Producer[]> {
-    return this.repository.find({ relations: ['properties'] });
+  async save(producer: Partial<Producer>): Promise<Producer> {
+    return this.repository.save(producer);
+  }
+
+  async findAll(options?: FindManyOptions<Producer>): Promise<Producer[]> {
+    return this.repository.find(options);
   }
 
   async findById(id: string): Promise<Producer | null> {
@@ -27,12 +31,23 @@ export class ProducersRepository {
     });
   }
 
+  async findByDocument(document: string): Promise<Producer | null> {
+    return this.repository.findOne({
+      where: { document },
+      relations: ['properties'],
+    });
+  }
+
+  async findOne(options: FindOneOptions<Producer>): Promise<Producer | null> {
+    return this.repository.findOne(options);
+  }
+
   async update(id: string, data: Partial<Producer>): Promise<Producer | null> {
     await this.repository.update(id, data);
     return this.findById(id);
   }
 
   async delete(id: string): Promise<void> {
-    await this.repository.delete(id);
+    await this.repository.softDelete(id);
   }
 }
