@@ -6,11 +6,15 @@ import {
   Param,
   Patch,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProducersService } from './producers.service';
 import { CreateProducerDto } from './dto/create-producer.dto';
 import { UpdateProducerDto } from './dto/update-producer.dto';
+import { ProducerResponseDto } from './dto/producer-response.dto';
+import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
+@UseInterceptors(new TransformInterceptor(ProducerResponseDto))
 @Controller('producers')
 export class ProducersController {
   constructor(private readonly service: ProducersService) {}
