@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
-import { BaseEntity } from 'src/common/entities/base.entity';
+import { BaseEntity } from '../../common/entities/base.entity';
 import { Producer } from '../../producers/entities/producer.entity';
 import { Harvest } from '../../harvests/entities/harvest.entity';
 
