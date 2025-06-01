@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProducersRepository } from './producers.repository';
-import { FarmsRepository } from './farms.repository';
 import { Producer } from '../producers/entities/producer.entity';
 import { Farm } from '../farms/entities/farm.entity';
+import { FarmsRepository, ProducersRepository } from '.';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Producer, Farm])],
