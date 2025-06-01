@@ -5,13 +5,17 @@ import {
   JoinColumn,
   OneToMany,
   Unique,
+  Index,
 } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Crop } from '../../crops/entities/crop.entity';
 import { Farm } from '../../farms/entities/farm.entity';
 
 @Entity()
-@Unique(['farm', 'year'])
+@Index('IDX_unique_farm_year_not_deleted', ['farmId', 'year'], {
+  unique: true,
+  where: '"deletedAt" IS NULL',
+})
 export class Harvest extends BaseEntity {
   constructor(input?: Partial<Harvest>) {
     super(input);
@@ -27,6 +31,9 @@ export class Harvest extends BaseEntity {
   })
   @JoinColumn({ name: 'farmId' })
   farm: Farm;
+
+  @Column()
+  farmId?: string;
 
   @OneToMany(() => Crop, (crop) => crop.harvest, { cascade: true })
   crops: Crop[];
