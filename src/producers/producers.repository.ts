@@ -12,7 +12,7 @@ import { Producer } from './entities/producer.entity';
 
 @Injectable()
 export class ProducersRepository {
-  private producerMetadata: EntityMetadata;
+  private entityMetadata: EntityMetadata;
   private relations: string[];
 
   constructor(
@@ -20,8 +20,8 @@ export class ProducersRepository {
     private readonly repository: Repository<Producer>,
     private readonly dataSource: DataSource,
   ) {
-    this.producerMetadata = this.dataSource.getMetadata(Producer);
-    this.relations = this.producerMetadata.relations.map(
+    this.entityMetadata = this.dataSource.getMetadata(Producer);
+    this.relations = this.entityMetadata.relations.map(
       (relation) => relation.propertyName,
     );
   }
