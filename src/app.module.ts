@@ -7,11 +7,13 @@ import { ProducersModule } from './producers/producers.module';
 import { FarmsModule } from './farms/farms.module';
 import { HarvestsModule } from './harvests/harvests.module';
 import { CropsModule } from './crops/crops.module';
+import { RepositoriesModule } from './repositories/repositories.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PostgresModule,
+    RepositoriesModule,
     ProducersModule,
     FarmsModule,
     HarvestsModule,

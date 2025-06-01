@@ -6,7 +6,7 @@ import {
 import { Producer } from './entities/producer.entity';
 import { CreateProducerDto } from './dto/create-producer.dto';
 import { UpdateProducerDto } from './dto/update-producer.dto';
-import { ProducersRepository } from './producers.repository';
+import { ProducersRepository } from '../repositories/producers.repository';
 
 @Injectable()
 export class ProducersService {

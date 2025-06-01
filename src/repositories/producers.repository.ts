@@ -8,7 +8,7 @@ import {
   DataSource,
   EntityMetadata,
 } from 'typeorm';
-import { Producer } from './entities/producer.entity';
+import { Producer } from '../producers/entities/producer.entity';
 
 @Injectable()
 export class ProducersRepository {
