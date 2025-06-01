@@ -6,6 +6,7 @@ import {
 import { CreateHarvestDto } from './dto/create-harvest.dto';
 import { Harvest } from './entities/harvest.entity';
 import { HarvestsRepository, FarmsRepository } from '../repositories';
+import { Crop } from '../crops/entities/crop.entity';
 
 @Injectable()
 export class HarvestsService {
@@ -57,5 +58,14 @@ export class HarvestsService {
     const harvest = await this.harvestsRepository.findById(id);
     if (!harvest) throw new NotFoundException('Safra não encontrada');
     await this.harvestsRepository.delete(id);
+  }
+
+  async findCropsByHarvest(harvestId: string): Promise<Crop[]> {
+    const harvest = await this.harvestsRepository.findById(harvestId);
+    if (!harvest) {
+      throw new NotFoundException('Safra não encontrada');
+    }
+
+    return harvest.crops || [];
   }
 }

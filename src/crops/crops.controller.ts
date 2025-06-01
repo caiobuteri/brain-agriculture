@@ -1,34 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import { CropsService } from './crops.service';
 import { CreateCropDto } from './dto/create-crop.dto';
-import { UpdateCropDto } from './dto/update-crop.dto';
+import { CropResponseDto } from './dto/crop-response.dto';
+import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
+@UseInterceptors(new TransformInterceptor(CropResponseDto))
 @Controller('crops')
 export class CropsController {
-  constructor(private readonly cropsService: CropsService) {}
+  constructor(private readonly service: CropsService) {}
 
   @Post()
-  create(@Body() createCropDto: CreateCropDto) {
-    return this.cropsService.create(createCropDto);
+  create(@Body() dto: CreateCropDto) {
+    return this.service.create(dto);
   }
 
   @Get()
   findAll() {
-    return this.cropsService.findAll();
+    return this.service.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cropsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCropDto: UpdateCropDto) {
-    return this.cropsService.update(+id, updateCropDto);
+  findById(@Param('id') id: string) {
+    return this.service.findById(id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cropsService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.service.delete(id);
   }
 }

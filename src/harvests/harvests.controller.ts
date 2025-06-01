@@ -12,6 +12,7 @@ import { HarvestsService } from './harvests.service';
 import { CreateHarvestDto } from './dto/create-harvest.dto';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 import { HarvestResponseDto } from './dto/harvest-response.dto';
+import { Crop } from '../crops/entities/crop.entity';
 
 @UseInterceptors(new TransformInterceptor(HarvestResponseDto))
 @Controller('harvests')
@@ -36,5 +37,10 @@ export class HarvestsController {
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.service.delete(id);
+  }
+
+  @Get(':id/crops')
+  async findCrops(@Param('id') harvestId: string): Promise<Crop[]> {
+    return this.service.findCropsByHarvest(harvestId);
   }
 }

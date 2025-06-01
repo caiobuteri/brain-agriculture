@@ -5,6 +5,7 @@ import {
   FindOneOptions,
   DataSource,
   EntityMetadata,
+  FindManyOptions,
 } from 'typeorm';
 import { Harvest } from '../harvests/entities/harvest.entity';
 
@@ -32,7 +33,7 @@ export class HarvestsRepository {
     return this.repository.save(harvest);
   }
 
-  findAll(options?: FindOneOptions<Harvest>): Promise<Harvest[]> {
+  findAll(options?: FindManyOptions<Harvest>): Promise<Harvest[]> {
     return this.repository.find({ ...options, relations: this.relations });
   }
 
@@ -43,7 +44,7 @@ export class HarvestsRepository {
   findById(id: string): Promise<Harvest | null> {
     return this.repository.findOne({
       where: { id },
-      relations: ['farm', 'crops'],
+      relations: this.relations,
     });
   }
 
