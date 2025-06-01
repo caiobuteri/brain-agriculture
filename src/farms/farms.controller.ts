@@ -14,6 +14,7 @@ import { UpdateFarmDto } from './dto/update-farm.dto';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 import { FarmResponseDto } from './dto/farm-response.dto';
 import { HarvestResponseDto } from '../harvests/dto/harvest-response.dto';
+import { ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
 
 @UseInterceptors(new TransformInterceptor(FarmResponseDto))
 @Controller('farms')
@@ -21,16 +22,28 @@ export class FarmsController {
   constructor(private readonly service: FarmsService) {}
 
   @Post()
+  @ApiCreatedResponse({
+    description: 'The record has been successfully created.',
+    type: FarmResponseDto,
+  })
   create(@Body() dto: CreateFarmDto) {
     return this.service.create(dto);
   }
 
   @Get()
+  @ApiResponse({
+    description: 'The record has been successfully created.',
+    type: [FarmResponseDto],
+  })
   findAll() {
     return this.service.findAll();
   }
 
   @Get(':id')
+  @ApiResponse({
+    description: 'The record has been successfully created.',
+    type: FarmResponseDto,
+  })
   findById(@Param('id') id: string) {
     return this.service.findById(id);
   }
@@ -46,6 +59,10 @@ export class FarmsController {
   }
 
   @Get(':id/harvests')
+  @ApiResponse({
+    description: 'The record has been successfully created.',
+    type: [HarvestResponseDto],
+  })
   @UseInterceptors(new TransformInterceptor(HarvestResponseDto))
   async findHarvests(@Param('id') farmId: string) {
     return this.service.findHarvestsByFarm(farmId);
