@@ -1,106 +1,173 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🌾 Brain Agriculture API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A **Brain Agriculture** é uma API RESTful desenvolvida com NestJS para gerenciar produtores rurais, fazendas, safras e culturas agrícolas, fornecendo também dados analíticos para dashboards.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📚 Sumário
 
-## Description
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Funcionalidades](#funcionalidades)
+- [Instalação](#instalação)
+- [Ambiente de Desenvolvimento](#ambiente-de-desenvolvimento)
+- [Execução do Projeto](#execução-do-projeto)
+- [Documentação da API](#documentação-da-api)
+- [Seed de Dados](#seed-de-dados)
+- [Testes](#testes)
+- [Diagrama de Entidades](#diagrama-de-entidades)
+- [Autores](#autores)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## 🛠 Tecnologias Utilizadas
 
-```bash
-$ yarn install
-```
+- **Node.js**
+- **NestJS**
+- **PostgreSQL**
+- **TypeORM**
+- **Swagger (OpenAPI)**
+- **Jest** (para testes)
+- **Docker** (opcional, para ambiente containerizado)
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ yarn run start
+## 🚀 Funcionalidades
 
-# watch mode
-$ yarn run start:dev
+### 👨‍🌾 Produtores (Producers)
 
-# production mode
-$ yarn run start:prod
-```
+- Criar, listar, buscar por ID e excluir produtores.
 
-## Run tests
+### 🌱 Fazendas (Farms)
 
-```bash
-# unit tests
-$ yarn run test
+- Criar, listar, buscar por ID e excluir fazendas.
+- Relacionamento com produtores.
+- Armazena informações como área total, área cultivável e vegetação.
 
-# e2e tests
-$ yarn run test:e2e
+### 🌾 Safras (Harvests)
 
-# test coverage
-$ yarn run test:cov
-```
+- Criar, listar, buscar por ID e excluir safras.
+- Cada safra pertence a uma fazenda e possui um ano.
+- Constraint única por fazenda + ano (apenas se `deletedAt` for `NULL`).
 
-## Deployment
+### 🌽 Culturas (Crops)
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+- Criar, listar, buscar por ID e excluir culturas.
+- Cada cultura está ligada a uma safra.
+- Constraint única por nome + safra (também considerando `deletedAt`).
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 📊 Dashboard
 
-```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
-```
+- Total de fazendas cadastradas.
+- Total de hectares registrados.
+- Gráficos de pizza:
+  - Por estado.
+  - Por cultura plantada.
+  - Por uso do solo (área agricultável vs vegetação).
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+## ⚙️ Instalação
 
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-
-## Migrations
-
-To generate new migrations, run:
+1. Clone o repositório:
 
 ```bash
-$ yarn migration:generate src/shared/database/migrations/initial
+git clone https://github.com/caiobuteri/brain-agriculture.git
+cd brain-agriculture
 ```
+
+2. Instale as dependências:
+
+```bash
+yarn install
+```
+
+3. Configure o banco de dados PostgreSQL no arquivo .env:
+
+```ts
+DB_HOST = 'localhost';
+DB_PORT = '5432';
+DB_NAME = 'brain_agriculture';
+DB_USERNAME = 'postgres';
+DB_PASSWORD = 'asdf1234';
+DB_SCHEMA = 'public';
+```
+
+## 💻 Ambiente de Desenvolvimento
+
+1. Rode as migrations para criação das tabelas + população do banco com dados de exemplo:
+
+```bash
+yarn migration:run
+```
+
+2. Inicie o servidor:
+
+```ts
+yarn start:dev
+```
+
+## 📖 Documentação da API
+
+A documentação está disponível automaticamente em:
+
+> [http://localhost:3000/api](http://localhost:3000/api)
+
+Ela é gerada com **Swagger (OpenAPI)** e inclui:
+
+- Todas as rotas disponíveis
+- Tipos de dados esperados (DTOs)
+- Respostas esperadas
+- Códigos de status HTTP
+- Tags organizadas por módulo
+
+### 📦 Exemplo de configuração no projeto
+
+O Swagger é configurado no `main.ts` da aplicação NestJS utilizando o `DocumentBuilder`:
+
+```ts
+const config = new DocumentBuilder()
+  .setTitle('Brain Agriculture Documentation')
+  .setDescription('The Brain Agriculture API Documentation')
+  .setVersion('1.0')
+  .addTag('brain-agriculture')
+  .build();
+
+const document = SwaggerModule.createDocument(app, config);
+SwaggerModule.setup('api', app, document);
+```
+
+## 🌱 Seed de Dados
+
+Para fins de testes e desenvolvimento, o projeto inclui uma migration responsável por popular automaticamente o banco com dados realistas e coerentes com o domínio da aplicação:
+
+- **3 produtores** com dados simulando nomes reais
+- **Cada produtor** possui entre **1 a 2 fazendas**
+- **Cada fazenda** possui entre **1 a 3 safras**
+- **Cada safra** contém **1 a 2 culturas (crops)**
+
+> 📌 **Observação:** Ao executar as migrations do TypeORM, essa estrutura de dados já será inserida automaticamente no banco de dados.  
+> Você não precisa se preocupar em inserir manualmente os registros iniciais.
+
+## ✅ Testes
+
+Executar todos os testes automatizados com:
+
+```bash
+yarn test
+```
+
+Você pode rodar um teste específico:
+
+```bash
+yarn test src/farms/farms.service.spec.ts
+```
+
+## 🗺 Diagrama de Entidades
+
+## 🧩 Diagrama Entidade-Relacionamento (ER)
+
+![alt text](image.png)
+
+## 👨‍💻 Autores
+
+Desenvolvido por:
+
+_Caio Buteri_
