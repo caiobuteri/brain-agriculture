@@ -34,10 +34,7 @@ export class ProducersService {
   }
 
   async findOne(id: string): Promise<Producer> {
-    const producer = await this.producerRepository.findOne({
-      where: { id },
-      relations: ['farms'],
-    });
+    const producer = await this.producerRepository.findById(id);
 
     if (!producer) {
       throw new NotFoundException('Produtor não encontrado.');
@@ -48,6 +45,10 @@ export class ProducersService {
 
   async update(id: string, dto: UpdateProducerDto): Promise<Producer> {
     const producer = await this.findOne(id);
+
+    if (!producer) {
+      throw new BadRequestException('Outro produtor já usa este CPF/CNPJ.');
+    }
 
     if (dto.document && dto.document !== producer.document) {
       // Verifica duplicidade
