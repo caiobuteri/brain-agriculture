@@ -90,6 +90,12 @@ DB_PASSWORD = 'asdf1234';
 DB_SCHEMA = 'public';
 ```
 
+## 🌐 API Online
+
+Acesse a API em produção:
+
+🔗 [https://brain-agriculture-production-bb20.up.railway.app](https://brain-agriculture-production-bb20.up.railway.app)
+
 ## 💻 Ambiente de Desenvolvimento
 
 1. Rode as migrations para criação das tabelas + população do banco com dados de exemplo:
@@ -108,7 +114,7 @@ yarn start:dev
 
 A documentação está disponível automaticamente em:
 
-> [http://localhost:3000/api](http://localhost:3000/api)
+> [https://brain-agriculture-production-bb20.up.railway.app/api](https://brain-agriculture-production-bb20.up.railway.app/api)
 
 Ela é gerada com **Swagger (OpenAPI)** e inclui:
 
