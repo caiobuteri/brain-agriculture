@@ -64,6 +64,14 @@ A **Brain Agriculture** é uma API RESTful desenvolvida com NestJS para gerencia
 
 ---
 
+## 🌐 API Online
+
+Acesse a API em produção:
+
+🔗 [https://brain-agriculture-production-bb20.up.railway.app](https://brain-agriculture-production-bb20.up.railway.app)
+
+---
+
 ## ⚙️ Instalação
 
 1. Clone o repositório:
@@ -89,12 +97,6 @@ DB_USERNAME = 'postgres';
 DB_PASSWORD = 'asdf1234';
 DB_SCHEMA = 'public';
 ```
-
-## 🌐 API Online
-
-Acesse a API em produção:
-
-🔗 [https://brain-agriculture-production-bb20.up.railway.app](https://brain-agriculture-production-bb20.up.railway.app)
 
 ## 💻 Ambiente de Desenvolvimento
 
