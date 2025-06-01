@@ -8,6 +8,7 @@ import { FarmsModule } from './farms/farms.module';
 import { HarvestsModule } from './harvests/harvests.module';
 import { CropsModule } from './crops/crops.module';
 import { RepositoriesModule } from './repositories/repositories.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RepositoriesModule } from './repositories/repositories.module';
     FarmsModule,
     HarvestsModule,
     CropsModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
