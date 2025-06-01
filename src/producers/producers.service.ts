@@ -7,6 +7,7 @@ import { Producer } from './entities/producer.entity';
 import { CreateProducerDto } from './dto/create-producer.dto';
 import { UpdateProducerDto } from './dto/update-producer.dto';
 import { ProducersRepository } from '../repositories/producers.repository';
+import { Farm } from '../farms/entities/farm.entity';
 
 @Injectable()
 export class ProducersService {
@@ -72,6 +73,15 @@ export class ProducersService {
   async remove(id: string): Promise<void> {
     const producer = await this.findOne(id);
     await this.producerRepository.delete(producer.id);
+  }
+
+  async findFarmsByProducer(producerId: string): Promise<Farm[]> {
+    const producer = await this.producerRepository.findById(producerId);
+    if (!producer) {
+      throw new NotFoundException('Produtor não encontrado');
+    }
+
+    return producer.farms || [];
   }
 
   private isValidCPFOrCNPJ(value: string): boolean {

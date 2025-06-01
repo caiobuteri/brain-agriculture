@@ -30,8 +30,9 @@ export class Farm extends BaseEntity {
 
   @ManyToOne(() => Producer, (producer) => producer.farms, {
     onDelete: 'CASCADE',
+    nullable: false,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'producerId' })
   producer: Producer;
 
   @OneToMany(() => Harvest, (harvest) => harvest.farm, { cascade: true })
