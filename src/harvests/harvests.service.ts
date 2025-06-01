@@ -1,26 +1,61 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateHarvestDto } from './dto/create-harvest.dto';
-import { UpdateHarvestDto } from './dto/update-harvest.dto';
+import { Harvest } from './entities/harvest.entity';
+import { HarvestsRepository, FarmsRepository } from '../repositories';
 
 @Injectable()
 export class HarvestsService {
-  create(createHarvestDto: CreateHarvestDto) {
-    return 'This action adds a new harvest';
+  constructor(
+    private readonly harvestsRepository: HarvestsRepository,
+    private readonly farmsRepository: FarmsRepository,
+  ) {}
+
+  async create(dto: CreateHarvestDto): Promise<Harvest> {
+    const farm = await this.farmsRepository.findById(dto.farmId);
+    if (!farm) {
+      throw new NotFoundException('Fazenda não encontrada');
+    }
+
+    // Verifica se já existe uma safra para a mesma fazenda e ano
+    const existing = await this.harvestsRepository.findOne({
+      where: {
+        farm: { id: dto.farmId },
+        year: dto.year,
+      },
+      relations: ['farm'],
+    });
+
+    if (existing) {
+      throw new BadRequestException(
+        'Já existe uma safra cadastrada para esta fazenda neste ano.',
+      );
+    }
+
+    const harvest = new Harvest({
+      year: dto.year,
+      farm,
+    });
+
+    return this.harvestsRepository.save(harvest);
   }
 
-  findAll() {
-    return `This action returns all harvests`;
+  async findAll(): Promise<Harvest[]> {
+    return this.harvestsRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} harvest`;
+  async findById(id: string): Promise<Harvest> {
+    const harvest = await this.harvestsRepository.findById(id);
+    if (!harvest) throw new NotFoundException('Safra não encontrada');
+    return harvest;
   }
 
-  update(id: number, updateHarvestDto: UpdateHarvestDto) {
-    return `This action updates a #${id} harvest`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} harvest`;
+  async delete(id: string): Promise<void> {
+    const harvest = await this.harvestsRepository.findById(id);
+    if (!harvest) throw new NotFoundException('Safra não encontrada');
+    await this.harvestsRepository.delete(id);
   }
 }

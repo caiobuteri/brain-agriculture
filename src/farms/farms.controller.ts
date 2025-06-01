@@ -13,6 +13,7 @@ import { CreateFarmDto } from './dto/create-farm.dto';
 import { UpdateFarmDto } from './dto/update-farm.dto';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 import { FarmResponseDto } from './dto/farm-response.dto';
+import { HarvestResponseDto } from '../harvests/dto/harvest-response.dto';
 
 @UseInterceptors(new TransformInterceptor(FarmResponseDto))
 @Controller('farms')
@@ -42,5 +43,11 @@ export class FarmsController {
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.service.delete(id);
+  }
+
+  @Get(':id/harvests')
+  @UseInterceptors(new TransformInterceptor(HarvestResponseDto))
+  async findHarvests(@Param('id') farmId: string) {
+    return this.service.findHarvestsByFarm(farmId);
   }
 }

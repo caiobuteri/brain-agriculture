@@ -1,34 +1,40 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseInterceptors,
+} from '@nestjs/common';
 import { HarvestsService } from './harvests.service';
 import { CreateHarvestDto } from './dto/create-harvest.dto';
-import { UpdateHarvestDto } from './dto/update-harvest.dto';
+import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
+import { HarvestResponseDto } from './dto/harvest-response.dto';
 
+@UseInterceptors(new TransformInterceptor(HarvestResponseDto))
 @Controller('harvests')
 export class HarvestsController {
-  constructor(private readonly harvestsService: HarvestsService) {}
+  constructor(private readonly service: HarvestsService) {}
 
   @Post()
-  create(@Body() createHarvestDto: CreateHarvestDto) {
-    return this.harvestsService.create(createHarvestDto);
+  create(@Body() dto: CreateHarvestDto) {
+    return this.service.create(dto);
   }
 
   @Get()
   findAll() {
-    return this.harvestsService.findAll();
+    return this.service.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.harvestsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateHarvestDto: UpdateHarvestDto) {
-    return this.harvestsService.update(+id, updateHarvestDto);
+  findById(@Param('id') id: string) {
+    return this.service.findById(id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.harvestsService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.service.delete(id);
   }
 }

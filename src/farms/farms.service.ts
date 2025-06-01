@@ -7,6 +7,7 @@ import { CreateFarmDto } from './dto/create-farm.dto';
 import { UpdateFarmDto } from './dto/update-farm.dto';
 import { Farm } from './entities/farm.entity';
 import { FarmsRepository, ProducersRepository } from '../repositories';
+import { Harvest } from '../harvests/entities/harvest.entity';
 
 @Injectable()
 export class FarmsService {
@@ -55,6 +56,15 @@ export class FarmsService {
     const farm = await this.farmRepository.findById(id);
     if (!farm) throw new NotFoundException('Fazenda não encontrada');
     return farm;
+  }
+
+  async findHarvestsByFarm(farmId: string): Promise<Harvest[]> {
+    const farm = await this.farmRepository.findById(farmId);
+    if (!farm) {
+      throw new NotFoundException('Fazenda não encontrada');
+    }
+
+    return farm.harvests || [];
   }
 
   private validateAreas(
