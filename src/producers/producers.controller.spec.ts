@@ -5,6 +5,29 @@ import { CreateProducerDto } from './dto/create-producer.dto';
 import { UpdateProducerDto } from './dto/update-producer.dto';
 import { Producer } from './entities/producer.entity';
 import { Farm } from '../farms/entities/farm.entity';
+import { User } from '../users/entities/user.entity';
+import { RoleName } from '../role/common/roles.enum';
+import { Role } from '../role/entities/role.entity';
+
+const mockUser: Partial<User> = {
+  id: 'user-uuid',
+  name: 'João Silva',
+  email: 'joao@example.com',
+  password: 'hashed-password',
+  roles: [
+    {
+      id: 'role-id',
+      name: RoleName.PRODUCER,
+      users: [], // circular ref, pode ser omitido em testes
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    } as Role,
+  ],
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  deletedAt: null,
+};
 
 const mockProducer: Producer = {
   id: '123',
@@ -15,6 +38,7 @@ const mockProducer: Producer = {
   updatedAt: new Date(),
   deletedAt: null,
   farms: [],
+  user: mockUser as User,
 };
 
 const mockFarm: Farm = {
@@ -69,6 +93,8 @@ describe('ProducersController', () => {
       firstName: 'John',
       lastName: 'Doe',
       document: '12345678900',
+      email: 'caiobuteri@gmail.com',
+      password: 'password123',
     };
     const result = await controller.create(dto);
     expect(service.create).toHaveBeenCalledWith(dto);

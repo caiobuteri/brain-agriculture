@@ -3,6 +3,30 @@ import { ProducersService } from './producers.service';
 import { ProducersRepository } from '../repositories/producers.repository';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Producer } from './entities/producer.entity';
+import { User } from '../users/entities/user.entity';
+import { RoleName } from '../role/common/roles.enum';
+import { Role } from '../role/entities/role.entity';
+import { mock } from 'node:test';
+
+const mockUser: Partial<User> = {
+  id: 'user-uuid',
+  name: 'João Silva',
+  email: 'joao@example.com',
+  password: 'hashed-password',
+  roles: [
+    {
+      id: 'role-id',
+      name: RoleName.PRODUCER,
+      users: [], // circular ref, pode ser omitido em testes
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    } as Role,
+  ],
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  deletedAt: null,
+};
 
 const mockProducer: Producer = {
   id: '1',
@@ -13,6 +37,7 @@ const mockProducer: Producer = {
   createdAt: new Date(),
   updatedAt: new Date(),
   deletedAt: null,
+  user: mockUser as User,
 };
 
 const mockRepository = {
@@ -48,7 +73,11 @@ describe('ProducersService', () => {
     mockRepository.findOne.mockResolvedValue(null);
     mockRepository.create.mockResolvedValue(mockProducer);
 
-    const result = await service.create(mockProducer);
+    const result = await service.create({
+      ...mockProducer,
+      email: mockUser.email!,
+      password: mockUser.password!,
+    });
     expect(result).toEqual(mockProducer);
     expect(repository.create).toHaveBeenCalled();
   });
@@ -56,9 +85,13 @@ describe('ProducersService', () => {
   it('should throw if CPF already exists', async () => {
     mockRepository.findOne.mockResolvedValue(mockProducer);
 
-    await expect(service.create(mockProducer)).rejects.toThrow(
-      BadRequestException,
-    );
+    await expect(
+      service.create({
+        ...mockProducer,
+        email: mockUser.email!,
+        password: mockUser.password!,
+      }),
+    ).rejects.toThrow(BadRequestException);
   });
 
   it('should return all producers', async () => {

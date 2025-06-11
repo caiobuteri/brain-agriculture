@@ -5,10 +5,33 @@ import { CreateHarvestDto } from './dto/create-harvest.dto';
 import { Harvest } from './entities/harvest.entity';
 import { Farm } from '../farms/entities/farm.entity';
 import { Producer } from '../producers/entities/producer.entity';
+import { User } from '../users/entities/user.entity';
+import { RoleName } from '../role/common/roles.enum';
+import { Role } from '../role/entities/role.entity';
 
 describe('HarvestsController', () => {
   let controller: HarvestsController;
   let service: HarvestsService;
+
+  const mockUser: Partial<User> = {
+    id: 'user-uuid',
+    name: 'João Silva',
+    email: 'joao@example.com',
+    password: 'hashed-password',
+    roles: [
+      {
+        id: 'role-id',
+        name: RoleName.PRODUCER,
+        users: [], // circular ref, pode ser omitido em testes
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      } as Role,
+    ],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
+  };
 
   const mockProducer: Producer = {
     id: 'producer-uuid',
@@ -19,6 +42,7 @@ describe('HarvestsController', () => {
     updatedAt: new Date(),
     deletedAt: null,
     farms: [],
+    user: mockUser as User,
   };
 
   const mockFarm: Farm = {
