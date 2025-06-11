@@ -8,26 +8,30 @@ import { CreateProducerDto } from './dto/create-producer.dto';
 import { UpdateProducerDto } from './dto/update-producer.dto';
 import { ProducersRepository } from '../repositories/producers.repository';
 import { Farm } from '../farms/entities/farm.entity';
+import { UsersService } from '../users/users.service';
+import { DataSource } from 'typeorm';
+import { RoleName } from '../role/common/roles.enum';
 
 @Injectable()
 export class ProducersService {
-  constructor(private readonly producerRepository: ProducersRepository) {}
+  constructor(
+    private readonly producerRepository: ProducersRepository,
+    private readonly usersService: UsersService,
+    private readonly dataSource: DataSource,
+  ) {}
 
   async create(dto: CreateProducerDto): Promise<Producer> {
-    // Validação de CPF/CNPJ duplicado
-    const exists = await this.producerRepository.findOne({
-      where: { document: dto.document },
+    console.log(dto);
+    return this.dataSource.transaction(async (manager) => {
+      const userName = `${dto.firstName} ${dto.lastName}`;
+      const user = await this.usersService.createUserWithRoleTransaction(
+        { ...dto, name: userName },
+        RoleName.PRODUCER,
+        manager,
+      );
+      const producer = manager.getRepository(Producer).create({ ...dto, user });
+      return manager.getRepository(Producer).save(producer);
     });
-    if (exists) {
-      throw new BadRequestException('CPF ou CNPJ já cadastrado.');
-    }
-
-    // Validação de formato básico de CPF/CNPJ (opcional)
-    if (!this.isValidCPFOrCNPJ(dto.document)) {
-      throw new BadRequestException('CPF ou CNPJ inválido.');
-    }
-
-    return this.producerRepository.create(dto);
   }
 
   async findAll(): Promise<Producer[]> {

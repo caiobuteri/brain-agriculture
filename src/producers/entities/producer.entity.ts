@@ -1,6 +1,7 @@
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Farm } from '../../farms/entities/farm.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class Producer extends BaseEntity {
@@ -17,6 +18,10 @@ export class Producer extends BaseEntity {
 
   @Column({ type: 'varchar' })
   lastName: string;
+
+  @OneToOne(() => User, { eager: true })
+  @JoinColumn()
+  user: User;
 
   @OneToMany(() => Farm, (farm) => farm.producer, { cascade: true })
   farms: Farm[];

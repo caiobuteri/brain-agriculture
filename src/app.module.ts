@@ -9,12 +9,18 @@ import { HarvestsModule } from './harvests/harvests.module';
 import { CropsModule } from './crops/crops.module';
 import { RepositoriesModule } from './repositories/repositories.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PostgresModule,
     RepositoriesModule,
+    AuthModule,
+    UsersModule,
+    RoleModule,
     ProducersModule,
     FarmsModule,
     HarvestsModule,

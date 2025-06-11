@@ -2,9 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { UsersService } from './users/users.service';
+import { RoleService } from './role/role.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const userService = app.get(UsersService);
+  const roleService = app.get(RoleService);
+
+  await roleService.seedRoles();
+  await userService.seedSuperAdmin();
 
   app.useGlobalPipes(
     new ValidationPipe({
