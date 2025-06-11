@@ -1,15 +1,10 @@
-import { IsNotEmpty, IsString, Length } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { CreateUserDto } from '../../users/dto/create-user.dto';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 
-export class CreateProducerDto {
-  @ApiProperty()
-  @IsNotEmpty({
-    message: 'Campo document é obrigatório',
-  })
-  @IsString()
-  @Length(11, 14)
-  document: string;
-
+export class CreateProducerDto extends OmitType(CreateUserDto, [
+  'name',
+] as const) {
   @ApiProperty()
   @IsNotEmpty({
     message: 'Campo firstName é obrigatório',
@@ -23,4 +18,8 @@ export class CreateProducerDto {
   })
   @IsString()
   lastName: string;
+
+  @ApiProperty()
+  @IsString()
+  document: string;
 }

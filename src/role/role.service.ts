@@ -15,4 +15,15 @@ export class RoleService {
     }
     return role;
   }
+
+  async seedRoles() {
+    const roleNames = Object.values(RoleName);
+
+    for (const name of roleNames) {
+      const exists = await this.repository.findOne({ where: { name } });
+      if (!exists) {
+        await this.repository.create({ name });
+      }
+    }
+  }
 }

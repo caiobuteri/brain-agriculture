@@ -7,6 +7,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from '../repositories';
 import { RoleName } from '../role/common/roles.enum';
 import { RoleService } from '../role/role.service';
+import { User } from './entities/user.entity';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -38,15 +40,45 @@ export class UsersService {
     return this.repository.create(dto); // não faz hash aqui!
   }
 
-  async createWithRole(dto: CreateUserDto, roleName: RoleName) {
-    const exists = await this.repository.findOne({
+  async createUserWithRole(
+    dto: CreateUserDto,
+    roleName: RoleName,
+  ): Promise<User> {
+    const existing = await this.repository.findOne({
       where: { email: dto.email },
     });
-    if (exists) throw new ConflictException('E-mail já cadastrado');
+    if (existing) {
+      throw new ConflictException('E-mail já cadastrado');
+    }
 
     const role = await this.roleService.findByName(roleName);
 
-    return this.repository.create({ ...dto, roles: [role] });
+    return this.repository.create({
+      ...dto,
+      roles: [role],
+    });
+  }
+
+  async createUserWithRoleTransaction(
+    dto: CreateUserDto,
+    roleName: RoleName,
+    manager: EntityManager,
+  ): Promise<User> {
+    const existing = await manager.findOne(User, {
+      where: { email: dto.email },
+    });
+    if (existing) {
+      throw new ConflictException('E-mail já cadastrado');
+    }
+
+    const role = await this.roleService.findByName(roleName);
+
+    const user = manager.create(User, {
+      ...dto,
+      roles: [role],
+    });
+
+    return manager.save(User, user);
   }
 
   async seedSuperAdmin() {

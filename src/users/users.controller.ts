@@ -34,22 +34,6 @@ export class UsersController {
     };
   }
 
-  @Post('producers')
-  @ApiOperation({ summary: 'Criação de produtor' })
-  @ApiCreatedResponse({ type: UserResponseDto })
-  @ApiResponse({ status: 400, description: 'Dados inválidos' })
-  @ApiResponse({ status: 409, description: 'E-mail já cadastrado' })
-  async createProducer(@Body() dto: CreateUserDto): Promise<UserResponseDto> {
-    const user = await this.usersService.createWithRole(dto, RoleName.PRODUCER);
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
-  }
-
   @Post('admins')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(RoleName.ADMIN)
@@ -60,7 +44,10 @@ export class UsersController {
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
   @ApiResponse({ status: 409, description: 'E-mail já cadastrado' })
   async createAdmin(@Body() dto: CreateUserDto): Promise<UserResponseDto> {
-    const user = await this.usersService.createWithRole(dto, RoleName.ADMIN);
+    const user = await this.usersService.createUserWithRole(
+      dto,
+      RoleName.ADMIN,
+    );
     return {
       id: user.id,
       name: user.name,

@@ -28,4 +28,9 @@ export class RolesRepository {
   async findOne(options: FindOneOptions<Role>): Promise<Role | null> {
     return this.repository.findOne({ ...options, relations: this.relations });
   }
+
+  async create(role: Partial<Role>): Promise<Role> {
+    const entity = this.repository.create(role);
+    return this.repository.save(entity);
+  }
 }
