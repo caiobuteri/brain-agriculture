@@ -1,11 +1,14 @@
 import { CreateUserDto } from '../../users/dto/create-user.dto';
 import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import * as sanitizeHtml from 'sanitize-html';
 
 export class CreateProducerDto extends OmitType(CreateUserDto, [
   'name',
 ] as const) {
   @ApiProperty()
+  @Transform(({ value }) => sanitizeHtml(value))
   @IsNotEmpty({
     message: 'Campo firstName é obrigatório',
   })
@@ -13,6 +16,7 @@ export class CreateProducerDto extends OmitType(CreateUserDto, [
   firstName: string;
 
   @ApiProperty()
+  @Transform(({ value }) => sanitizeHtml(value))
   @IsNotEmpty({
     message: 'Campo lastName é obrigatório',
   })
@@ -20,6 +24,7 @@ export class CreateProducerDto extends OmitType(CreateUserDto, [
   lastName: string;
 
   @ApiProperty()
+  @Transform(({ value }) => sanitizeHtml(value))
   @IsString()
   document: string;
 }
