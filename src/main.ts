@@ -4,9 +4,11 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { UsersService } from './users/users.service';
 import { RoleService } from './role/role.service';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.set('trust proxy', 'loopback');
 
   const userService = app.get(UsersService);
   const roleService = app.get(RoleService);
