@@ -5,10 +5,16 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { UsersService } from './users/users.service';
 import { RoleService } from './role/role.service';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.set('trust proxy', 'loopback');
+  app.use(helmet());
+  app.enableCors({
+    origin: true, // permite qualquer origem dinâmica (útil em dev/testes)
+    credentials: true, // permite envio de cookies/headers de autenticação
+  });
 
   const userService = app.get(UsersService);
   const roleService = app.get(RoleService);
