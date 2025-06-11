@@ -2,6 +2,58 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CropsController } from './crops.controller';
 import { CropsService } from './crops.service';
 import { Crop } from './entities/crop.entity';
+import { Farm } from '../farms/entities/farm.entity';
+import { Producer } from '../producers/entities/producer.entity';
+import { User } from '../users/entities/user.entity';
+import { RoleName } from '../role/common/roles.enum';
+import { Role } from '../role/entities/role.entity';
+
+export const mockUser: Partial<User> = {
+  id: 'user-uuid',
+  name: 'João Silva',
+  email: 'joao@example.com',
+  password: 'hashed-password',
+  roles: [
+    {
+      id: 'role-id',
+      name: RoleName.PRODUCER,
+      users: [], // circular ref, pode ser omitido em testes
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    } as Role,
+  ],
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  deletedAt: null,
+};
+
+const mockProducer: Producer = {
+  id: 'producer-uuid',
+  document: '12345678901',
+  firstName: 'João',
+  lastName: 'Silva',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  deletedAt: null,
+  farms: [],
+  user: mockUser as User,
+};
+
+const mockFarm: Farm = {
+  id: 'farm-uuid',
+  name: 'Fazenda Santa Luzia',
+  city: 'Ribeirão Preto',
+  state: 'SP',
+  totalArea: 150,
+  cultivableArea: 90,
+  vegetationArea: 60,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  deletedAt: null,
+  producer: mockProducer,
+  harvests: [],
+};
 
 const mockCrop: Crop = {
   id: 'crop-uuid',
@@ -9,7 +61,15 @@ const mockCrop: Crop = {
   createdAt: new Date(),
   updatedAt: new Date(),
   deletedAt: null,
-  harvest: { id: 'harvest-uuid' } as any,
+  harvest: {
+    id: 'harvest-uuid',
+    crops: [],
+    farm: mockFarm,
+    year: 2023,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
+  },
   harvestId: 'harvest-uuid',
 };
 

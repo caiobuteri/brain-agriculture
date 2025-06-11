@@ -3,6 +3,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class InsertData1748797978922 implements MigrationInterface {
   name = 'InsertData1748797978922';
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async up(queryRunner: QueryRunner): Promise<void> {
     // Insert producers
     //     await queryRunner.query(`INSERT INTO producer (id, "firstName", "lastName", document, "createdAt", "updatedAt", "deletedAt") VALUES
@@ -116,5 +117,6 @@ export class InsertData1748797978922 implements MigrationInterface {
     // ('e387b7c7-2111-4e61-b381-fe16b8772e55', 'Limão', '43b9fba4-261f-431b-aaeb-466d37855662', NOW(), NOW(), NULL)`);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async down(queryRunner: QueryRunner): Promise<void> {}
 }

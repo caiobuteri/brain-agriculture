@@ -6,6 +6,43 @@ import { UpdateFarmDto } from './dto/update-farm.dto';
 import { Farm } from './entities/farm.entity';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 
+import { Producer } from '../producers/entities/producer.entity';
+import { User } from '../users/entities/user.entity';
+import { RoleName } from '../role/common/roles.enum';
+import { Role } from '../role/entities/role.entity';
+
+export const mockUser: Partial<User> = {
+  id: 'user-uuid',
+  name: 'João Silva',
+  email: 'joao@example.com',
+  password: 'hashed-password',
+  roles: [
+    {
+      id: 'role-id',
+      name: RoleName.PRODUCER,
+      users: [], // circular ref, pode ser omitido em testes
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    } as Role,
+  ],
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  deletedAt: null,
+};
+
+const mockProducer: Producer = {
+  id: 'producer-uuid',
+  document: '12345678901',
+  firstName: 'João',
+  lastName: 'Silva',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  deletedAt: null,
+  farms: [],
+  user: mockUser as User,
+};
+
 const mockFarm: Farm = new Farm({
   id: 'farm-id',
   name: 'Fazenda A',
@@ -14,7 +51,7 @@ const mockFarm: Farm = new Farm({
   totalArea: 100,
   cultivableArea: 60,
   vegetationArea: 40,
-  producer: { id: 'producer-id' } as any,
+  producer: mockProducer,
   harvests: [],
 });
 

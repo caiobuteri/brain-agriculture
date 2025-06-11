@@ -6,29 +6,35 @@ export class DashboardService {
   constructor(private readonly dataSource: DataSource) {}
 
   async getDashboardData() {
-    const totalFarms = await this.dataSource
+    // Número total de fazendas
+    const totalFarms: number = await this.dataSource
       .getRepository('farm')
       .createQueryBuilder('farm')
       .where('farm.deletedAt IS NULL')
       .getCount();
 
-    const totalHectares = await this.dataSource
-      .getRepository('farm')
-      .createQueryBuilder('farm')
-      .select('SUM(farm.totalArea)', 'sum')
-      .where('farm.deletedAt IS NULL')
-      .getRawOne();
+    // Soma total de hectares
+    const totalHectares: { sum: string | null } | undefined =
+      await this.dataSource
+        .getRepository('farm')
+        .createQueryBuilder('farm')
+        .select('SUM(farm.totalArea)', 'sum')
+        .where('farm.deletedAt IS NULL')
+        .getRawOne();
 
-    const farmsByState = await this.dataSource
-      .getRepository('farm')
-      .createQueryBuilder('farm')
-      .select('farm.state', 'state')
-      .addSelect('COUNT(*)', 'count')
-      .where('farm.deletedAt IS NULL')
-      .groupBy('farm.state')
-      .getRawMany();
+    // Fazendas agrupadas por estado
+    const farmsByState: { state: string; count: string }[] =
+      await this.dataSource
+        .getRepository('farm')
+        .createQueryBuilder('farm')
+        .select('farm.state', 'state')
+        .addSelect('COUNT(*)', 'count')
+        .where('farm.deletedAt IS NULL')
+        .groupBy('farm.state')
+        .getRawMany();
 
-    const cropsByName = await this.dataSource
+    // Culturas agrupadas por nome
+    const cropsByName: { name: string; count: string }[] = await this.dataSource
       .getRepository('crop')
       .createQueryBuilder('crop')
       .leftJoin('crop.harvest', 'harvest')
@@ -41,7 +47,10 @@ export class DashboardService {
       .groupBy('crop.name')
       .getRawMany();
 
-    const landUse = await this.dataSource
+    // Soma das áreas cultiváveis e de vegetação
+    const landUse:
+      | { cultivable: string | null; vegetation: string | null }
+      | undefined = await this.dataSource
       .getRepository('farm')
       .createQueryBuilder('farm')
       .select('SUM(farm.cultivableArea)', 'cultivable')

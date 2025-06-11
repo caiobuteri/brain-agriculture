@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   FindOneOptions,
   Repository,
-  FindManyOptions,
   DataSource,
   EntityMetadata,
 } from 'typeorm';

@@ -1,6 +1,5 @@
 // src/user/dto/user-response.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
-import { RoleName } from '../../role/common/roles.enum';
 
 export class UserResponseDto {
   @ApiProperty()

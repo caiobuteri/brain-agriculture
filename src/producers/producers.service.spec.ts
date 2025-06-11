@@ -6,7 +6,6 @@ import { Producer } from './entities/producer.entity';
 import { User } from '../users/entities/user.entity';
 import { RoleName } from '../role/common/roles.enum';
 import { Role } from '../role/entities/role.entity';
-import { mock } from 'node:test';
 
 const mockUser: Partial<User> = {
   id: 'user-uuid',
