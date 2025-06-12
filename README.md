@@ -94,6 +94,49 @@ A nova versão do projeto traz melhorias concretas nas áreas de segurança, Dev
 - Separação de ambientes no Docker:
 - Arquivo docker-compose.prod.yml para produção com imagem otimizada.
 
+## ✅ Testes Implementados
+
+A aplicação foi testada com foco em confiabilidade, qualidade de código e comportamento real em produção. Abaixo estão os tipos de testes implementados:
+
+### 🧪 Testes Unitários e de Integração
+
+- Cobertura completa dos principais serviços:
+  - `AuthService`
+  - `UsersService`
+  - `ProducersService`
+- Mocks robustos com `jest.fn()` e simulação de:
+  - Repositórios do TypeORM
+  - Transações com `DataSource`
+- Casos positivos e negativos:
+  - Criação com CPF duplicado
+  - Login com credenciais inválidas
+- Limpeza e controle de estado com `DataSource`
+- Relatório de cobertura gerado com:
+
+```bash
+yarn test --coverage
+```
+
+### 📦 Testes E2E com Supertest
+
+- Autenticação de superadmin (/auth/login)
+- Criação de novo admin autenticado (/auth/register)
+- Testes com validação de JWT e proteção por role (SUPERADMIN)
+- Limpeza de dados de teste usando DataSource (evita poluição do banco Railway)
+- Ambiente configurado para executar os testes E2E no CI de desenvolvimento
+
+### ⚙️ Testes de carga (em andamento)
+
+- Será implementado com Artillery
+- Simulação de múltiplos logins simultâneos
+- Análise de tempo de resposta, throughput e estabilidade sob carga
+
+### 🤝 Testes de contrato (em andamento)
+
+- Planejado com Pact
+- Validação dos contratos entre AuthService (provider) e o frontend (consumer)
+- Garante que mudanças no backend não quebrem a integração
+
 ---
 
 ## 🌐 API Online
