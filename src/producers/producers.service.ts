@@ -48,6 +48,18 @@ export class ProducersService {
     return producer;
   }
 
+  async findByUserId(id: string): Promise<Producer> {
+    const producer = await this.producerRepository.findOne({
+      where: { user: { id } },
+    });
+
+    if (!producer) {
+      throw new NotFoundException('Produtor não encontrado.');
+    }
+
+    return producer;
+  }
+
   async update(id: string, dto: UpdateProducerDto): Promise<Producer> {
     const producer = await this.findOne(id);
 
