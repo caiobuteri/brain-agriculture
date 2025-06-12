@@ -7,7 +7,7 @@ import { User } from '../users/entities/user.entity';
 import { RoleName } from '../role/common/roles.enum';
 import { Role } from '../role/entities/role.entity';
 import { UsersService } from '../users/users.service';
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 
 const mockUser: Partial<User> = {
   id: 'user-uuid',
@@ -52,8 +52,8 @@ const mockRepository = {
 
 const mockRepoFromManager = {
   findOne: jest.fn(),
-  create: jest.fn().mockImplementation((data) => data),
-  save: jest.fn().mockImplementation((data) => ({
+  create: jest.fn().mockImplementation((data: Partial<Producer>) => data),
+  save: jest.fn().mockImplementation((data: Partial<Producer>) => ({
     ...data,
     id: 'producer-id',
     createdAt: new Date(),
@@ -64,7 +64,6 @@ const mockRepoFromManager = {
 
 describe('ProducersService', () => {
   let service: ProducersService;
-  let repository: ProducersRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -92,12 +91,18 @@ describe('ProducersService', () => {
         {
           provide: DataSource,
           useValue: {
-            transaction: jest.fn().mockImplementation(async (cb) => {
-              const mockEntityManager = {
-                getRepository: jest.fn().mockReturnValue(mockRepoFromManager),
-              };
-              return cb(mockEntityManager);
-            }),
+            transaction: jest
+              .fn()
+              .mockImplementation(
+                async (cb: (manager: EntityManager) => Promise<Producer>) => {
+                  const mockEntityManager: Partial<EntityManager> = {
+                    getRepository: jest
+                      .fn()
+                      .mockReturnValue(mockRepoFromManager),
+                  };
+                  return cb(mockEntityManager as EntityManager);
+                },
+              ),
           },
         },
       ],
