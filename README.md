@@ -64,6 +64,35 @@ A **Brain Agriculture** é uma API RESTful desenvolvida com NestJS para gerencia
 
 ---
 
+## 🧠 Brain Agriculture – Versão 2 (V2)
+A nova versão do projeto traz melhorias concretas nas áreas de segurança, DevOps, deploy e boas práticas, elevando a maturidade da aplicação para o ambiente de produção.
+
+### 🔐 Segurança
+- Autenticação com JWT: Implementação de autenticação segura utilizando @nestjs/jwt, com integração aos guards do NestJS.
+- Controle de acesso com RolesGuard: Implementação de RBAC simples com decorators (@Roles()) e um RolesGuard customizado para controle de permissões por perfil de usuário.
+- Variáveis de ambiente protegidas: Centralização e verificação do uso de variáveis como JWT_SECRET com fallback e validações adequadas.
+- Uso de Helmet: Configuração de headers HTTP para reforço da segurança contra ataques comuns.
+- CORS configurado: Acesso ao backend limitado aos domínios autorizados.
+- Rate limiting básico: Prevenção de abusos com configuração de limitação de requisições.
+
+### ⚙️ DevOps
+- CI com GitHub Actions:
+  - Workflow automatizado para instalação, build e testes da aplicação em pushes e pull requests na branch main.
+  - Estratégia de cache de dependências para acelerar os builds.
+  - Ambiente de CI configurado para Node.js 22.x.
+- Criação de ambiente dev separado: Adição de workflow específico para validações em branches de desenvolvimento (ex: dev).
+- Deploy via Railway:
+  - Ambiente de produção publicado com domínio:
+  - https://brain-agriculture-production-bb20.up.railway.app
+  - Ambiente de desenvolvimento publicado com domínio:
+  - https://brain-agriculture-develop.up.railway.app
+- Configuração de variáveis de ambiente por ambiente.
+- Logs centralizados fornecidos pela plataforma.
+- Separação de ambientes no Docker:
+- Arquivo docker-compose.prod.yml para produção com imagem otimizada.
+
+---
+
 ## 🌐 API Online
 
 Acesse a API em produção:
