@@ -21,7 +21,6 @@ export class ProducersService {
   ) {}
 
   async create(dto: CreateProducerDto): Promise<Producer> {
-    console.log(dto);
     return this.dataSource.transaction(async (manager) => {
       const userName = `${dto.firstName} ${dto.lastName}`;
       const user = await this.usersService.createUserWithRoleTransaction(
@@ -29,6 +28,20 @@ export class ProducersService {
         RoleName.PRODUCER,
         manager,
       );
+
+      // Validação de CPF/CNPJ duplicado
+      const exists = await manager.getRepository(Producer).findOne({
+        where: { document: dto.document },
+      });
+      if (exists) {
+        throw new BadRequestException('CPF ou CNPJ já cadastrado.');
+      }
+
+      // Validação de formato básico de CPF/CNPJ (opcional)
+      if (!this.isValidCPFOrCNPJ(dto.document)) {
+        throw new BadRequestException('CPF ou CNPJ inválido.');
+      }
+
       const producer = manager.getRepository(Producer).create({ ...dto, user });
       return manager.getRepository(Producer).save(producer);
     });
