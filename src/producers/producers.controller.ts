@@ -6,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  Req,
   Request,
   UseGuards,
   UseInterceptors,
@@ -22,6 +21,7 @@ import { RolesGuard } from '../role/common/roles.guard';
 import { RoleName } from '../role/common/roles.enum';
 import { Roles } from '../role/common/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
 
 @Controller('producers')
 export class ProducersController {
@@ -53,7 +53,7 @@ export class ProducersController {
   @ApiResponse({ status: 200, description: 'Dados retornados com sucesso' })
   @ApiResponse({ status: 401, description: 'Não autenticado' })
   @ApiResponse({ status: 403, description: 'Sem permissão' })
-  async findMe(@Request() req) {
+  async findMe(@Request() req: AuthenticatedRequest) {
     return this.service.findByUserId(req.user.id);
   }
 
