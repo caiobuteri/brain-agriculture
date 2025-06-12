@@ -44,7 +44,7 @@ jobs:
         env:
           NODE_ENV: development
           DB_HOST: ${{ secrets.DB_HOST_RAILWAY_DEVELOP }}
-          DB_USER: ${{ secrets.DB_USERNAME_RAILWAY_DEVELOP }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME_RAILWAY_DEVELOP }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD_RAILWAY_DEVELOP }}
           DB_NAME: ${{ secrets.DB_NAME_RAILWAY_DEVELOP }}
           DB_PORT: ${{ secrets.DB_PORT_RAILWAY_DEVELOP }}
