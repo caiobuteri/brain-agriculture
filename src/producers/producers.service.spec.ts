@@ -6,6 +6,8 @@ import { Producer } from './entities/producer.entity';
 import { User } from '../users/entities/user.entity';
 import { RoleName } from '../role/common/roles.enum';
 import { Role } from '../role/entities/role.entity';
+import { UsersService } from '../users/users.service';
+import { DataSource, EntityManager } from 'typeorm';
 
 const mockUser: Partial<User> = {
   id: 'user-uuid',
@@ -48,20 +50,65 @@ const mockRepository = {
   delete: jest.fn(),
 };
 
+const mockRepoFromManager = {
+  findOne: jest.fn(),
+  create: jest.fn().mockImplementation((data: Partial<Producer>) => data),
+  save: jest.fn().mockImplementation((data: Partial<Producer>) => ({
+    ...data,
+    id: 'producer-id',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
+  })),
+};
+
 describe('ProducersService', () => {
   let service: ProducersService;
-  let repository: ProducersRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProducersService,
-        { provide: ProducersRepository, useValue: mockRepository },
+        {
+          provide: ProducersRepository,
+          useValue: mockRepository,
+        },
+        {
+          provide: UsersService,
+          useValue: {
+            createUserWithRoleTransaction: jest.fn().mockResolvedValue({
+              id: 'user-uuid',
+              name: 'João Silva',
+              email: 'joao@example.com',
+              password: 'hashed-password',
+              roles: [],
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              deletedAt: null,
+            }),
+          },
+        },
+        {
+          provide: DataSource,
+          useValue: {
+            transaction: jest
+              .fn()
+              .mockImplementation(
+                async (cb: (manager: EntityManager) => Promise<Producer>) => {
+                  const mockEntityManager: Partial<EntityManager> = {
+                    getRepository: jest
+                      .fn()
+                      .mockReturnValue(mockRepoFromManager),
+                  };
+                  return cb(mockEntityManager as EntityManager);
+                },
+              ),
+          },
+        },
       ],
     }).compile();
 
-    service = module.get(ProducersService);
-    repository = module.get(ProducersRepository);
+    service = module.get<ProducersService>(ProducersService);
   });
 
   afterEach(() => {
@@ -77,12 +124,21 @@ describe('ProducersService', () => {
       email: mockUser.email!,
       password: mockUser.password!,
     });
-    expect(result).toEqual(mockProducer);
-    expect(repository.create).toHaveBeenCalled();
+    expect(result).toMatchObject({
+      document: mockProducer.document,
+      firstName: mockProducer.firstName,
+      lastName: mockProducer.lastName,
+      user: {
+        id: 'user-uuid',
+        email: 'joao@example.com',
+      },
+    });
+
+    expect(mockRepoFromManager.create).toHaveBeenCalled();
   });
 
   it('should throw if CPF already exists', async () => {
-    mockRepository.findOne.mockResolvedValue(mockProducer);
+    mockRepoFromManager.findOne.mockResolvedValue(mockProducer);
 
     await expect(
       service.create({
@@ -125,7 +181,7 @@ describe('ProducersService', () => {
   it('should remove a producer', async () => {
     mockRepository.findById.mockResolvedValue(mockProducer);
     await service.remove('1');
-    expect(repository.delete).toHaveBeenCalledWith('1');
+    expect(mockRepository.delete).toHaveBeenCalledWith('1');
   });
 
   it('should return farms by producer', async () => {

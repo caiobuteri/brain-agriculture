@@ -37,5 +37,17 @@ jobs:
       - name: Type checking
         run: yarn typecheck
 
-      # - name: Tests
-      #   run: yarn jest
+      - name: Run Unit Tests
+        run: yarn test
+
+      - name: Run E2E Tests (shared DB)
+        env:
+          NODE_ENV: development
+          DB_HOST: ${{ secrets.DB_HOST_RAILWAY_DEVELOP }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME_RAILWAY_DEVELOP }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD_RAILWAY_DEVELOP }}
+          DB_NAME: ${{ secrets.DB_NAME_RAILWAY_DEVELOP }}
+          DB_PORT: ${{ secrets.DB_PORT_RAILWAY_DEVELOP }}
+        run: |
+          echo "⚠️ Rodando E2E usando banco real"
+          yarn test:e2e

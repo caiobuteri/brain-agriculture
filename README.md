@@ -65,9 +65,11 @@ A **Brain Agriculture** é uma API RESTful desenvolvida com NestJS para gerencia
 ---
 
 ## 🧠 Brain Agriculture – Versão 2 (V2)
+
 A nova versão do projeto traz melhorias concretas nas áreas de segurança, DevOps, deploy e boas práticas, elevando a maturidade da aplicação para o ambiente de produção.
 
 ### 🔐 Segurança
+
 - Autenticação com JWT: Implementação de autenticação segura utilizando @nestjs/jwt, com integração aos guards do NestJS.
 - Controle de acesso com RolesGuard: Implementação de RBAC simples com decorators (@Roles()) e um RolesGuard customizado para controle de permissões por perfil de usuário.
 - Variáveis de ambiente protegidas: Centralização e verificação do uso de variáveis como JWT_SECRET com fallback e validações adequadas.
@@ -76,6 +78,7 @@ A nova versão do projeto traz melhorias concretas nas áreas de segurança, Dev
 - Rate limiting básico: Prevenção de abusos com configuração de limitação de requisições.
 
 ### ⚙️ DevOps
+
 - CI com GitHub Actions:
   - Workflow automatizado para instalação, build e testes da aplicação em pushes e pull requests na branch main.
   - Estratégia de cache de dependências para acelerar os builds.
@@ -90,6 +93,49 @@ A nova versão do projeto traz melhorias concretas nas áreas de segurança, Dev
 - Logs centralizados fornecidos pela plataforma.
 - Separação de ambientes no Docker:
 - Arquivo docker-compose.prod.yml para produção com imagem otimizada.
+
+## ✅ Testes Implementados
+
+A aplicação foi testada com foco em confiabilidade, qualidade de código e comportamento real em produção. Abaixo estão os tipos de testes implementados:
+
+### 🧪 Testes Unitários e de Integração
+
+- Cobertura completa dos principais serviços:
+  - `AuthService`
+  - `UsersService`
+  - `ProducersService`
+- Mocks robustos com `jest.fn()` e simulação de:
+  - Repositórios do TypeORM
+  - Transações com `DataSource`
+- Casos positivos e negativos:
+  - Criação com CPF duplicado
+  - Login com credenciais inválidas
+- Limpeza e controle de estado com `DataSource`
+- Relatório de cobertura gerado com:
+
+```bash
+yarn test --coverage
+```
+
+### 📦 Testes E2E com Supertest
+
+- Autenticação de superadmin (/auth/login)
+- Criação de novo admin autenticado (/auth/register)
+- Testes com validação de JWT e proteção por role (SUPERADMIN)
+- Limpeza de dados de teste usando DataSource (evita poluição do banco Railway)
+- Ambiente configurado para executar os testes E2E no CI de desenvolvimento
+
+### ⚙️ Testes de carga (em andamento)
+
+- Será implementado com Artillery
+- Simulação de múltiplos logins simultâneos
+- Análise de tempo de resposta, throughput e estabilidade sob carga
+
+### 🤝 Testes de contrato (em andamento)
+
+- Planejado com Pact
+- Validação dos contratos entre AuthService (provider) e o frontend (consumer)
+- Garante que mudanças no backend não quebrem a integração
 
 ---
 
