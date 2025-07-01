@@ -143,28 +143,28 @@ yarn test --coverage
 
 ## 🌐 API Online
 
-Acesse a API em produção:
+Access the production API:
 
 🔗 [https://brain-agriculture-production-bb20.up.railway.app](https://brain-agriculture-production-bb20.up.railway.app)
 
 ---
 
-## ⚙️ Instalação
+## ⚙️ Installation
 
-1. Clone o repositório:
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/caiobuteri/brain-agriculture.git
 cd brain-agriculture
 ```
 
-2. Instale as dependências:
+2. Install the dependencies:
 
 ```bash
 yarn install
 ```
 
-3. Configure o banco de dados PostgreSQL no arquivo .env:
+3. Configure the PostgreSQL database in the .env file:
 
 ```ts
 DB_HOST = 'localhost';
@@ -175,37 +175,37 @@ DB_PASSWORD = 'asdf1234';
 DB_SCHEMA = 'public';
 ```
 
-## 💻 Ambiente de Desenvolvimento
+## 💻 Development Environment
 
-1. Rode as migrations para criação das tabelas + população do banco com dados de exemplo:
+1. Run the migrations to create tables and populate the database with sample data:
 
 ```bash
 yarn migration:run
 ```
 
-2. Inicie o servidor:
+2. Start the server:
 
 ```ts
 yarn start:dev
 ```
 
-## 📖 Documentação da API
+## 📖 API Documentation
 
-A documentação está disponível automaticamente em:
+The documentation is automatically available at:
 
 > [https://brain-agriculture-production-bb20.up.railway.app/api](https://brain-agriculture-production-bb20.up.railway.app/api)
 
-Ela é gerada com **Swagger (OpenAPI)** e inclui:
+It is generated using Swagger (OpenAPI) and includes:
 
-- Todas as rotas disponíveis
-- Tipos de dados esperados (DTOs)
-- Respostas esperadas
-- Códigos de status HTTP
-- Tags organizadas por módulo
+- All available routes
+- Expected data types (DTOs)
+- Expected responses
+- HTTP status codes
+- Tags organized by module
 
-### 📦 Exemplo de configuração no projeto
+### 📦 Example of project configuration
 
-O Swagger é configurado no `main.ts` da aplicação NestJS utilizando o `DocumentBuilder`:
+Swagger is configured in the application's `main.ts` file using `DocumentBuilder`:
 
 ```ts
 const config = new DocumentBuilder()
@@ -219,40 +219,25 @@ const document = SwaggerModule.createDocument(app, config);
 SwaggerModule.setup('api', app, document);
 ```
 
-## 🌱 Seed de Dados
+## 🌱 Data Seeding
 
-Para fins de testes e desenvolvimento, o projeto inclui uma migration responsável por popular automaticamente o banco com dados realistas e coerentes com o domínio da aplicação:
+For testing and development purposes, the project includes a migration that automatically populates the database with realistic and domain-consistent data:
 
-- **3 produtores** com dados simulando nomes reais
-- **Cada produtor** possui entre **1 a 2 fazendas**
-- **Cada fazenda** possui entre **1 a 3 safras**
-- **Cada safra** contém **1 a 2 culturas (crops)**
+- **3 producers** with simulated real names
+- **Each producer** has between **1 to 2 farms**
+- **Each farm** has between **1 to 3 harvests**
+- **Each harvest** contains **1 to 2 crops**
 
-> 📌 **Observação:** Ao executar as migrations do TypeORM, essa estrutura de dados já será inserida automaticamente no banco de dados.  
-> Você não precisa se preocupar em inserir manualmente os registros iniciais.
+> 📌 **Note:** When running TypeORM migrations, this data structure will be automatically inserted into the database.  
+> You don't need to worry about manually inserting the initial records.
 
-## ✅ Testes
+## 🗺 Entity Diagram
 
-Executar todos os testes automatizados com:
-
-```bash
-yarn test
-```
-
-Você pode rodar um teste específico:
-
-```bash
-yarn test src/farms/farms.service.spec.ts
-```
-
-## 🗺 Diagrama de Entidades
-
-## 🧩 Diagrama Entidade-Relacionamento (ER)
+## 🧩 Entity-Relationship (ER) Diagram
 
 ![alt text](image.png)
 
-## 👨‍💻 Autores
+## 👨‍💻 Authors
 
-Desenvolvido por:
-
+Developed by:
 _Caio Buteri_
