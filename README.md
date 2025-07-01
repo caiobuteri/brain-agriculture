@@ -1,3 +1,5 @@
+Se quiser ler em português, [clique aqui](https://github.com/caiobuteri/brain-agriculture/blob/main/readme-ptBR.md)
+
 # 🌾 Brain Agriculture API
 
 **Brain Agriculture** is a RESTful API developed with NestJS to manage rural producers, farms, harvests, and crops, also providing analytical data for dashboards.
