@@ -1,142 +1,144 @@
 # 🌾 Brain Agriculture API
 
-A **Brain Agriculture** é uma API RESTful desenvolvida com NestJS para gerenciar produtores rurais, fazendas, safras e culturas agrícolas, fornecendo também dados analíticos para dashboards.
+**Brain Agriculture** is a RESTful API developed with NestJS to manage rural producers, farms, harvests, and crops, also providing analytical data for dashboards.
 
-## 📚 Sumário
+## 📚 Table of Contents
 
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Funcionalidades](#funcionalidades)
-- [Instalação](#instalação)
-- [Ambiente de Desenvolvimento](#ambiente-de-desenvolvimento)
-- [Execução do Projeto](#execução-do-projeto)
-- [Documentação da API](#documentação-da-api)
-- [Seed de Dados](#seed-de-dados)
-- [Testes](#testes)
-- [Diagrama de Entidades](#diagrama-de-entidades)
-- [Autores](#autores)
+- [Technologies Used](#tecnologias-utilizadas)
+- [Features](#funcionalidades)
+- [Installation](#instalação)
+- [Development Environment](#ambiente-de-desenvolvimento)
+- [Running the Project](#execução-do-projeto)
+- [API Documentation](#documentação-da-api)
+- [Data Seeding](#seed-de-dados)
+- [Testing](#testes)
+- [Entity Diagram](#diagrama-de-entidades)
+- [Authors](#autores)
 
 ---
 
-## 🛠 Tecnologias Utilizadas
+## 🛠 Technologies Used
 
 - **Node.js**
 - **NestJS**
 - **PostgreSQL**
 - **TypeORM**
 - **Swagger (OpenAPI)**
-- **Jest** (para testes)
-- **Docker** (opcional, para ambiente containerizado)
+- **Jest** (for testing)
+- **Docker** (optional, for containerized environment)
 
 ---
 
-## 🚀 Funcionalidades
+## 🚀 Features
 
-### 👨‍🌾 Produtores (Producers)
+### 👨‍🌾 Producers
 
-- Criar, listar, buscar por ID e excluir produtores.
+- Create, list, fetch by ID, and delete producers.
 
-### 🌱 Fazendas (Farms)
+### 🌱 Farms
 
-- Criar, listar, buscar por ID e excluir fazendas.
-- Relacionamento com produtores.
-- Armazena informações como área total, área cultivável e vegetação.
+- Create, list, fetch by ID, and delete farms.
+- Linked to producers.
+- Stores information such as total area, cultivable area, and vegetation.
 
-### 🌾 Safras (Harvests)
+### 🌾 Harvests
 
-- Criar, listar, buscar por ID e excluir safras.
-- Cada safra pertence a uma fazenda e possui um ano.
-- Constraint única por fazenda + ano (apenas se `deletedAt` for `NULL`).
+- Create, list, fetch by ID, and delete harvests.
+- Each harvest belongs to a farm and has a year.
+- Unique constraint per farm + year (only if deletedAt is NULL).
 
-### 🌽 Culturas (Crops)
+### 🌽 Crops
 
-- Criar, listar, buscar por ID e excluir culturas.
-- Cada cultura está ligada a uma safra.
-- Constraint única por nome + safra (também considerando `deletedAt`).
+- Create, list, fetch by ID, and delete crops.
+- Each crop is linked to a harvest.
+- Unique constraint per name + harvest (also considering deletedAt).
 
 ### 📊 Dashboard
 
-- Total de fazendas cadastradas.
-- Total de hectares registrados.
-- Gráficos de pizza:
-  - Por estado.
-  - Por cultura plantada.
-  - Por uso do solo (área agricultável vs vegetação).
+- Total number of registered farms.
+- Total hectares recorded.
+- Pie charts:
+  - By state.
+  - By planted crop.
+  - By land use (cultivable area vs. vegetation).
 
 ---
 
-## 🧠 Brain Agriculture – Versão 2 (V2)
+## 🧠 Brain Agriculture – Version 2 (V2)
 
-A nova versão do projeto traz melhorias concretas nas áreas de segurança, DevOps, deploy e boas práticas, elevando a maturidade da aplicação para o ambiente de produção.
+The new version of the project brings concrete improvements in security, DevOps, deployment, and best practices, raising the application's maturity for a production environment.
 
-### 🔐 Segurança
+### 🔐 Security
 
-- Autenticação com JWT: Implementação de autenticação segura utilizando @nestjs/jwt, com integração aos guards do NestJS.
-- Controle de acesso com RolesGuard: Implementação de RBAC simples com decorators (@Roles()) e um RolesGuard customizado para controle de permissões por perfil de usuário.
-- Variáveis de ambiente protegidas: Centralização e verificação do uso de variáveis como JWT_SECRET com fallback e validações adequadas.
-- Uso de Helmet: Configuração de headers HTTP para reforço da segurança contra ataques comuns.
-- CORS configurado: Acesso ao backend limitado aos domínios autorizados.
-- Rate limiting básico: Prevenção de abusos com configuração de limitação de requisições.
+- JWT Authentication: Secure authentication implemented using @nestjs/jwt, integrated with NestJS guards.
+- Access Control with RolesGuard: Simple RBAC implementation using decorators (@Roles()) and a custom RolesGuard to control permissions based on user roles.
+- Protected Environment Variables: Centralized management and validation of environment variables like JWT_SECRET, with fallback and proper checks.
+- Helmet Usage: HTTP headers configured to enhance protection against common attacks.
+- CORS Configuration: Backend access restricted to authorized domains.
+- Basic Rate Limiting: Request throttling configured to prevent abuse.
 
 ### ⚙️ DevOps
 
-- CI com GitHub Actions:
-  - Workflow automatizado para instalação, build e testes da aplicação em pushes e pull requests na branch main.
-  - Estratégia de cache de dependências para acelerar os builds.
-  - Ambiente de CI configurado para Node.js 22.x.
-- Criação de ambiente dev separado: Adição de workflow específico para validações em branches de desenvolvimento (ex: dev).
-- Deploy via Railway:
-  - Ambiente de produção publicado com domínio:
-  - https://brain-agriculture-production-bb20.up.railway.app
-  - Ambiente de desenvolvimento publicado com domínio:
-  - https://brain-agriculture-develop.up.railway.app
-- Configuração de variáveis de ambiente por ambiente.
-- Logs centralizados fornecidos pela plataforma.
-- Separação de ambientes no Docker:
-- Arquivo docker-compose.prod.yml para produção com imagem otimizada.
+- CI with GitHub Actions:
+  - Automated workflow for installing dependencies, building, and testing the application on pushes and pull requests to the main branch.
+  - Dependency caching strategy to speed up builds.
+  - CI environment configured for Node.js 22.x.
+- Separate Dev Environment:
+  - Specific workflow added for validations on development branches (e.g., dev).
+- Deployment via Railway:
+  - Production environment deployed at:
+    - https://brain-agriculture-production-bb20.up.railway.app
+  - Development environment deployed at:
+    - https://brain-agriculture-develop.up.railway.app
+- Environment-Specific Variables.
+  - Separate configuration for each environment.
+- Centralized Logs: Provided by the platform:
+- Docker Environment Separation:
+  - docker-compose.prod.yml file for production using an optimized image.
 
-## ✅ Testes Implementados
+## ✅ Implemented Tests
 
-A aplicação foi testada com foco em confiabilidade, qualidade de código e comportamento real em produção. Abaixo estão os tipos de testes implementados:
+The application has been tested with a focus on reliability, code quality, and real production behavior. Below are the types of tests implemented:
 
-### 🧪 Testes Unitários e de Integração
+### 🧪 Unit and Integration Tests
 
-- Cobertura completa dos principais serviços:
+- Full coverage of the main services:
   - `AuthService`
   - `UsersService`
   - `ProducersService`
-- Mocks robustos com `jest.fn()` e simulação de:
-  - Repositórios do TypeORM
-  - Transações com `DataSource`
-- Casos positivos e negativos:
-  - Criação com CPF duplicado
-  - Login com credenciais inválidas
-- Limpeza e controle de estado com `DataSource`
-- Relatório de cobertura gerado com:
+- Robust mocks using jest.fn() simulating:
+  - TypeORM repositories
+  - Transactions using `DataSource`
+- Positive and negative cases:
+  - Creation with duplicated CPF
+  - Login with invalid credentials
+- Cleanup and state control using `DataSource`
+- Coverage report generated with:
 
 ```bash
 yarn test --coverage
 ```
 
-### 📦 Testes E2E com Supertest
+### 📦 E2E Tests with Supertest
 
-- Autenticação de superadmin (/auth/login)
-- Criação de novo admin autenticado (/auth/register)
-- Testes com validação de JWT e proteção por role (SUPERADMIN)
-- Limpeza de dados de teste usando DataSource (evita poluição do banco Railway)
-- Ambiente configurado para executar os testes E2E no CI de desenvolvimento
+- Superadmin authentication (/auth/login)
+- Authenticated admin creation (/auth/register)
+- Tests validating JWT and role-based protection (SUPERADMIN)
+- Test data cleanup using DataSource (prevents database pollution on Railway)
+- Environment configured to run E2E tests in the development CI
 
-### ⚙️ Testes de carga (em andamento)
+### ⚙️ Load Testing (in progress)
 
-- Será implementado com Artillery
-- Simulação de múltiplos logins simultâneos
-- Análise de tempo de resposta, throughput e estabilidade sob carga
+- To be implemented with Artillery
+- Simulation of multiple simultaneous logins
+- Analysis of response time, throughput, and stability under load
 
-### 🤝 Testes de contrato (em andamento)
+### 🤝 Contract Testing (in progress)
 
-- Planejado com Pact
-- Validação dos contratos entre AuthService (provider) e o frontend (consumer)
-- Garante que mudanças no backend não quebrem a integração
-
+- Planned with Pact
+- Contract validation between AuthService (provider) and frontend (consumer)
+- Ensures that backend changes do not break integration
+  
 ---
 
 ## 🌐 API Online
